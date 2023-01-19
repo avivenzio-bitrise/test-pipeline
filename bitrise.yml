@@ -1,0 +1,78 @@
+format_version: "3"
+default_step_lib_source: https://github.com/bitrise-io/bitrise-steplib.git
+project_type: ""
+app:
+  envs:
+  - SERVICE_NAME: test-pipeline
+
+meta:
+  bitrise.io:
+    machine_type_id: standard
+
+trigger_map:
+- push_branch: master
+  pipeline: deploy-pipeline
+- pull_request_target_branch: '*'
+  pipeline: ci-pipeline
+
+pipelines:
+  pipeline-1:
+    stages:
+    - stage-1: {}
+
+stages:
+  stage-1:
+    workflows:
+    - wf-1: {}
+
+workflows:
+  wf-1:
+    before_run:
+    - _setup
+    - _install_node
+    steps:
+    - yarn@0.1.2:
+        title: Install dependencies
+    - script@1:
+        title: Build
+        inputs:
+        - content: |-
+            #!/usr/bin/env bash
+            # fail if any commands fails and debug
+            set -ex
+            yarn build
+  wf-2:
+    before_run:
+    - _setup
+    - _install_node
+    steps:
+    - yarn@0.1.2:
+        title: Install dependencies
+    - script@1:
+        title: test
+        inputs:
+        - content: |-
+            #!/usr/bin/env bash
+            # fail if any commands fails and debug
+            set -ex
+            yarn test1
+            yarn test2
+
+  _setup:
+    steps:
+    - activate-ssh-key@4.0.3: {}
+    - git-clone@7:
+        title: Git clone
+  _install_node:
+    steps:
+    - script@1.1.5:
+        title: install nodejs with asdf
+        inputs:
+        - content: |-
+            #!/usr/bin/env bash
+            set -ex
+            git clone https://github.com/asdf-vm/asdf.git ~/.asdf --branch v0.10.2
+            source ~/.asdf/asdf.sh
+            asdf plugin add nodejs https://github.com/asdf-vm/asdf-nodejs.git
+            asdf install nodejs
+            envman add --key PATH --value $PATH

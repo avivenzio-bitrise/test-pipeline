@@ -1,0 +1,22 @@
+{
+  "name": "test-pipeline",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build": "echo 'build step'",
+    "test1": "echo 'test1 step'",
+    "test2": "echo 'test2 step'",
+    "test3": "echo 'test3 step'"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/avivenzio-bitrise/test-pipeline.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/avivenzio-bitrise/test-pipeline/issues"
+  },
+  "homepage": "https://github.com/avivenzio-bitrise/test-pipeline#readme"
+}
